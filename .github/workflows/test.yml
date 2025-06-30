@@ -19,7 +19,7 @@ jobs:
       - name: Set up Node.js
         uses: actions/setup-node@v4
         with:
-          node-version: 18.x
+          node-version: ${{ env.NODE_VERSION }}
 
       - name: Cache node_modules
         id: cached-node-modules
@@ -151,3 +151,42 @@ jobs:
         with:
           name: cypress-videos
           path: cypress/videos
+
+  api_tests:
+    name: API tests with ElasticSearch enabled - ${{ matrix.elasticsearch_enabled }}
+    needs: [install-and-cache]
+    runs-on: ubuntu-latest
+
+    strategy:
+      fail-fast: false
+      matrix:
+        elasticsearch_enabled: ["yes", "no"]
+
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v4
+
+      - name: Set up Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: ${{ env.NODE_VERSION }}
+
+      - name: Restore node_modules
+        id: cached-node-modules
+        uses: actions/cache@v4
+        with:
+          path: node_modules
+          key: node-modules-${{ hashFiles('package-lock.json') }}-${{ env.NODE_VERSION }}
+
+      - name: API tests
+        env:
+          ELASTICSEARCH_ENABLED: ${{ matrix.elasticsearch_enabled }}
+          CLUSTER_NAME: es-cluster
+          ES_PASSWORD: duo-password
+          MEM_LIMIT: 4G
+          STACK_VERSION: 8.8.2
+        # Start mongo container and app before running api tests
+        run: |
+          cp CI/ESS/docker-compose.api.yaml docker-compose.yaml
+          docker compose up --build -d
+          npm run test:api
