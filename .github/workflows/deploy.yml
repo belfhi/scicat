@@ -59,3 +59,27 @@ jobs:
           push: true
           platforms: linux/amd64,linux/arm64/v8
           tags: ${{ steps.meta.outputs.tags }}
+
+      - uses: actions/create-github-app-token@v2Add commentMore actions
+        id: app-token
+        with:
+          app-id: ${{ secrets.WORKFLOW_DISPATCHER_APP_ID }}
+          private-key: ${{ secrets.WORKFLOW_DISPATCHER_APP_PRIVATE_KEY }}
+          repositories: scitacean
+
+      - name: Trigger test workflow in scitacean
+        uses: actions/github-script@v7
+        with:
+          github-token: ${{ steps.app-token.outputs.token }}
+          script: |
+            github.rest.actions.createWorkflowDispatch({
+              owner: 'SciCatProject',
+              repo: 'scitacean',
+              workflow_id: 'test.yml',  
+              ref: 'main',
+              inputs: {
+                "backend-version": "latest",
+                "python-version": "3.13",
+                "tox-env": "py313-full"
+              }
+            })
