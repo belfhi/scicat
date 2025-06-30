@@ -18,6 +18,9 @@ jobs:
             context: backend-next
           - image: ghcr.io/${{ github.repository }}/frontend
             context: frontend
+    permissions:
+      contents: read
+      packages: write
     steps:
       - name: Checkout
         uses: actions/checkout@v4
