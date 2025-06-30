@@ -37,6 +37,7 @@ jobs:
           # We want to keep it when the app is running to improve the swagger documentation and usage.
           SDK_PACKAGE_SWAGGER_HELPERS_DISABLED: true
         run: |
+          cd backend-next
           npm install -g wait-on && npm install
           npm run start & wait-on http://localhost:3000/api/v3/health --timeout 200000
 
