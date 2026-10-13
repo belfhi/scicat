@@ -16,7 +16,7 @@ services:
       - "3000:3000"
   mongodb:
       container_name: scicat-db
-      image: "bitnami/mongodb:latest"
+      image: "soldevelo/mongodb:latest"
       ports:
         - "27017:27017"
       volumes:

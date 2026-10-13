@@ -9,7 +9,7 @@ services:
     volumes:
       - /var/run/docker.sock:/var/run/docker.sock
   mongodb:
-    image: "bitnami/mongodb:latest"
+    image: "soldevelo/mongodb:latest"
     volumes:
       - "mongodb_data:/bitnami"
   openldap:

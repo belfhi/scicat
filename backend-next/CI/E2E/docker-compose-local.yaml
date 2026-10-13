@@ -1,7 +1,7 @@
 version: "3.2"
 services:
   mongodb:
-    image: bitnami/mongodb:latest
+    image: soldevelo/mongodb:latest
     volumes:
       - "mongodb_data:/bitnami"
     ports:

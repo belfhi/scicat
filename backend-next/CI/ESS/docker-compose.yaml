@@ -11,7 +11,7 @@ services:
 
   local-rabbit-rabbitmq.dev:
     hostname: local-rabbit-rabbitmq.dev
-    image: 'bitnami/rabbitmq:latest'
+    image: 'soldevelo/rabbitmq:latest'
     labels:
       kompose.service.type: nodeport
     ports:
